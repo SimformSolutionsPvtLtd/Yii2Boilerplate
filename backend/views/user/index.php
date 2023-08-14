@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Enum;
 use common\models\User;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -30,14 +31,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
+            'id',
             'username',
             'email:email',
             [
                 'attribute' => 'status',
-                'filter' => User::USER_STATUS_ARRAY,
+                'filter' => Enum::GENERAL_STATUS_ARRAY,
                 'filterInputOptions' => ['class' => 'form-control', 'prompt' => 'All'],
                 'value' => function($model) {
-                    $userStatuses = User::USER_STATUS_ARRAY;
+                    $userStatuses = Enum::GENERAL_STATUS_ARRAY;
                     return !empty($userStatuses[$model->status]) ? $userStatuses[$model->status] : "";
                 }
             ],
@@ -47,7 +49,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return date("Y-m-d h:i A", $model->created_at);
                 }
             ],
-            //'updated_at',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {

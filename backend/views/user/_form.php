@@ -1,6 +1,6 @@
 <?php
 
-use common\models\User;
+use common\models\Enum;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-6">
-            <?= $form->field($model, 'status')->dropDownList(User::USER_STATUS_ARRAY) ?>
+            <?= $form->field($model, 'status')->dropDownList(Enum::GENERAL_STATUS_ARRAY) ?>
         </div>
     </div>
     

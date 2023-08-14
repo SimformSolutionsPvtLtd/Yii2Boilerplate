@@ -1,6 +1,6 @@
 <?php
 
-use common\models\User;
+use common\models\Enum;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'value' => function($model) {
-                    $userStatuses = User::USER_STATUS_ARRAY;
+                    $userStatuses = Enum::GENERAL_STATUS_ARRAY;
                     return !empty($userStatuses[$model->status]) ? $userStatuses[$model->status] : "";
                 }
             ],

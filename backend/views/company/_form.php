@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Enum;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -11,23 +12,34 @@ use yii\widgets\ActiveForm;
 <div class="company-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    <div class="row col-md-12">
+        <div class="row col-md-6">
+            <div class="col-md-12">
+                <?= $form->field($model, 'comapny_name')->textInput(['maxlength' => true]) ?>
+            </div>
 
-    <?= $form->field($model, 'comapny_name')->textInput(['maxlength' => true]) ?>
+            <div class="col-md-12">
+                <?= $form->field($model, 'company_email')->textInput(['maxlength' => true]) ?>
+            </div>
 
-    <?= $form->field($model, 'address')->textarea(['rows' => 6]) ?>
+            <div class="col-md-12">
+                <?= $form->field($model, 'contact_number')->textInput(['maxlength' => true]) ?>
+            </div>
+        </div>
 
-    <?= $form->field($model, 'company_email')->textInput(['maxlength' => true]) ?>
+        <div class="col-md-6">
+            <?= $form->field($model, 'address')->textarea(['rows' => 6]) ?>
+        </div>
 
-    <?= $form->field($model, 'contact_number')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'status')->textInput() ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <div class="col-md-6 row">
+            <?= $form->field($model, 'status')->dropDownList(Enum::GENERAL_STATUS_ARRAY) ?>
+        </div>
+    </div>
+    
+    <div class="col-md-12 mt-2">
+        <div class="form-group">
+            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

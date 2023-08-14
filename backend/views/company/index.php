@@ -1,6 +1,7 @@
 <?php
 
 use backend\models\Company;
+use common\models\Enum;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -10,7 +11,7 @@ use yii\widgets\Pjax;
 /** @var backend\models\CompanySearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Companies';
+$this->title = 'Company';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="company-index">
@@ -29,15 +30,26 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'comapny_name',
             'address:ntext',
             'company_email:email',
             'contact_number',
-            //'status',
-            //'created_at',
-            //'updated_at',
+            [
+                'attribute' => 'status',
+                'filter' => Enum::GENERAL_STATUS_ARRAY,
+                'filterInputOptions' => ['class' => 'form-control', 'prompt' => 'All'],
+                'value' => function($model) {
+                    $userStatuses = Enum::GENERAL_STATUS_ARRAY;
+                    return !empty($userStatuses[$model->status]) ? $userStatuses[$model->status] : "";
+                }
+            ],
+            [
+                'attribute' => 'created_at',
+                'value' => function($model) {
+                    return date("Y-m-d h:i A", $model->created_at);
+                }
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Company $model, $key, $index, $column) {

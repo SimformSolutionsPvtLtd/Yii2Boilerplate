@@ -67,8 +67,8 @@ class User extends ActiveRecord implements IdentityInterface
             [['username'], 'unique'],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
-            ['status', 'default', 'value' => self::STATUS_INACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            ['status', 'default', 'value' => Enum::STATUS_INACTIVE],
+            ['status', 'in', 'range' => [Enum::STATUS_ACTIVE, Enum::STATUS_INACTIVE, Enum::STATUS_DELETED]],
         ];
     }
 
@@ -93,7 +93,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['id' => $id, 'status' => Enum::STATUS_ACTIVE]);
     }
 
     /**
@@ -112,7 +112,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByEmail($email)
     {
-        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['email' => $email, 'status' => Enum::STATUS_ACTIVE]);
     }
 
     /**
@@ -129,7 +129,7 @@ class User extends ActiveRecord implements IdentityInterface
 
         return static::findOne([
             'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
+            'status' => Enum::STATUS_ACTIVE,
         ]);
     }
 
@@ -142,7 +142,7 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByVerificationToken($token) {
         return static::findOne([
             'verification_token' => $token,
-            'status' => self::STATUS_INACTIVE
+            'status' => Enum::STATUS_INACTIVE
         ]);
     }
 

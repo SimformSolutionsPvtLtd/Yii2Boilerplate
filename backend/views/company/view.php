@@ -1,13 +1,14 @@
 <?php
 
+use common\models\Enum;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
 /** @var backend\models\Company $model */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Companies', 'url' => ['index']];
+$this->title = $model->comapny_name;
+$this->params['breadcrumbs'][] = ['label' => 'Company', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -34,9 +35,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'address:ntext',
             'company_email:email',
             'contact_number',
-            'status',
-            'created_at',
-            'updated_at',
+            [
+                'attribute' => 'status',
+                'value' => function($model) {
+                    $userStatuses = Enum::GENERAL_STATUS_ARRAY;
+                    return !empty($userStatuses[$model->status]) ? $userStatuses[$model->status] : "";
+                }
+            ],
+            [
+                'attribute' => 'created_at',
+                'value' => function($model) {
+                    return date("dS F, Y  h:i A", $model->created_at);
+                }
+            ],
         ],
     ]) ?>
 

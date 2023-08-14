@@ -50,7 +50,7 @@ class SignupCest
         $I->seeRecord('common\models\User', [
             'username' => 'tester',
             'email' => 'tester.email@example.com',
-            'status' => \common\models\User::STATUS_INACTIVE
+            'status' => \common\models\Enum::STATUS_INACTIVE
         ]);
 
         $I->seeEmailIsSent();
