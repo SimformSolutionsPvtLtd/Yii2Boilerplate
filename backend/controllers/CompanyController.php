@@ -3,10 +3,13 @@
 namespace backend\controllers;
 
 use backend\models\Company;
+use backend\models\CompanyImages;
 use backend\models\CompanySearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * CompanyController implements the CRUD actions for Company model.
@@ -114,6 +117,29 @@ class CompanyController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Uploads company images model.
+     * If upload is successful, the browser will be redirected to the 'Company view' page.
+     * @param int $id ID
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUploadImages($id)
+    {
+        $model = new CompanyImages();
+        $model->company_id = $id;
+
+        if (Yii::$app->request->isPost) {
+            $model->imageFiles = UploadedFile::getInstances($model, 'image_name');
+            if ($model->upload()) {
+                // Images upload and save success
+                return $this->redirect(['view', 'id' => $id]);
+            }
+        }
+
+        return $this->render('company-images', ['model' => $model]);
     }
 
     /**

@@ -19,4 +19,6 @@ class Enum extends model
         self::STATUS_INACTIVE => "Inactive", 
         self::STATUS_DELETED => "Deleted"
     ];
+
+    const UPLOAD_COMPANY_IMAGES = "uploads/company/";
 }
