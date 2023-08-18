@@ -58,10 +58,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]) ?>
-    
-    <h1><?= Html::encode($model->company_name) ?></h1>
 
-    <h2>Images</h2>
+    <h2>Company Images</h2>
     <div class="container image-gallery">
         <div class="row">
             <?php foreach ($model->companyImages as $image) { ?>

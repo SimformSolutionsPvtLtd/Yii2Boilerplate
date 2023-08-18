@@ -74,6 +74,21 @@ class CompanyController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+                $mailer = Yii::$app->mailer;
+                $message = $mailer->compose()
+                    ->setTo('kerul@simformsolutions.com')
+                    ->setFrom('kerul@simformsolutions.com')
+                    ->setSubject('Company Added : ' . $model->company_name)
+                    ->setTextBody('You company is added successfully.')
+                    ->setHtmlBody('<b>Company name</b> : ' .  $model->company_name)
+                    ->send();
+
+                if ($message) {
+                    Yii::$app->session->setFlash('success', 'Mail sent successfully.');
+                } else {
+                    Yii::$app->session->setFlash('error', 'Something went wrong in sending mail.');
+                }
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -97,6 +112,21 @@ class CompanyController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            $mailer = Yii::$app->mailer;
+            $message = $mailer->compose()
+                ->setTo('kerul@simformsolutions.com')
+                ->setFrom('kerul@simformsolutions.com')
+                ->setSubject('Company updated : ' . $model->company_name)
+                ->setTextBody('You company is updated successfully.')
+                ->setHtmlBody('<b>Company name</b> : ' .  $model->company_name)
+                ->send();
+
+            if ($message) {
+                Yii::$app->session->setFlash('success', 'Mail sent successfully.');
+            } else {
+                Yii::$app->session->setFlash('error', 'Something went wrong in sending mail.');
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

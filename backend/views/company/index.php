@@ -1,9 +1,7 @@
 <?php
 
-use backend\models\Company;
 use common\models\Enum;
 use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
