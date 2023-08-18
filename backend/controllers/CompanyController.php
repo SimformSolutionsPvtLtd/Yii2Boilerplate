@@ -173,6 +173,27 @@ class CompanyController extends Controller
     }
 
     /**
+     * Deletes an existing Company image.
+     * If deletion is successful, the browser will be redirected to the 'view' page.
+     * @param int $id ID
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDeleteImage($id)
+    {
+        $companyImages = CompanyImages::findOne(['id' => $id]);
+        $companyId = $companyImages->company_id;
+
+        if ($companyImages->delete()) {
+            Yii::$app->session->setFlash('success', 'Image deleted successfully.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Image is not deleted.');
+        }
+
+        return $this->redirect(['view', 'id' => $companyId]);
+    }
+
+    /**
      * Finds the Company model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID

@@ -12,3 +12,29 @@
     max-width: 100%;
     height: auto;
 }
+
+.custom-file-upload {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.custom-file-input {
+    display: none;
+}
+
+.custom-file-label {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.image-gallery .row_images {
+    display: flex;
+    flex-direction: column;
+}
+
+.image-buttons {
+    margin-top: auto; /* Pushes the button to the bottom */
+}

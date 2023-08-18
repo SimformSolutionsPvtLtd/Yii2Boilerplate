@@ -60,25 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <h2>Company Images</h2>
-    <div class="container image-gallery">
-        <div class="row">
-            <?php foreach ($model->companyImages as $image) { ?>
-                <div class="col-md-3">
-                        <?= Html::img(
-                            '/' . Yii::getAlias('@baseDir/common/' . Enum::UPLOAD_COMPANY_IMAGES . $image->image_name), [
-                                'alt' => 'Image', 
-                                'width' => "100%",
-                                'class' => 'modelOpen',
-                                'data-toggle' => 'modal',
-                                'data-target' => '#imageModal',
-                            ]
-                        ); ?>
-                        <a class="btn btn-danger mt-2 removeImage" data-company-id="<?= $image->company_id; ?>" href="">Remove</a>
-                </div>
-            <?php } ?>
-        </div>
-
-    </div>
+    <?php echo $this->render('company_image_gallery', ['companyImages' => $model->companyImages]); ?>
 
     <?php Modal::begin([
         'id' => "imageModal",
