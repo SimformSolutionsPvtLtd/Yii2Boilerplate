@@ -25,9 +25,15 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
-    const STATUS_INACTIVE = 9;
-    const STATUS_ACTIVE = 10;
+    const STATUS_ACTIVE = 1;
+    const STATUS_INACTIVE = 2;
+    const STATUS_DELETED = 3;
+
+    const USER_STATUS_ARRAY = [
+        self::STATUS_ACTIVE => "Active", 
+        self::STATUS_INACTIVE => "Inactive", 
+        self::STATUS_DELETED => "Deleted"
+    ];
 
 
     /**
@@ -54,8 +60,31 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_INACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            [['username', 'auth_key', 'password_hash', 'email', 'created_at', 'updated_at'], 'required'],
+            [['status', 'created_at', 'updated_at'], 'integer'],
+            [['username', 'password_hash', 'password_reset_token', 'email', 'verification_token'], 'string', 'max' => 255],
+            [['auth_key'], 'string', 'max' => 32],
+            [['username'], 'unique'],
+            [['email'], 'unique'],
+            [['password_reset_token'], 'unique'],
+            ['status', 'default', 'value' => Enum::STATUS_INACTIVE],
+            ['status', 'in', 'range' => [Enum::STATUS_ACTIVE, Enum::STATUS_INACTIVE, Enum::STATUS_DELETED]],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'Id',
+            'username' => 'User name',
+            'auth_key' => 'Auth Key',
+            'password_hash' => 'Password Hash',
+            'password_reset_token' => 'Password Reset Token',
+            'email' => 'Email',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'verification_token' => 'Verification Token',
         ];
     }
 
@@ -64,26 +93,26 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['id' => $id, 'status' => Enum::STATUS_ACTIVE]);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return static::findOne(['auth_key' => $token]);
     }
 
     /**
-     * Finds user by username
+     * Finds user by email
      *
-     * @param string $username
+     * @param string $email
      * @return static|null
      */
-    public static function findByUsername($username)
+    public static function findByEmail($email)
     {
-        return static::findOne(['email' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['email' => $email, 'status' => Enum::STATUS_ACTIVE]);
     }
 
     /**
@@ -100,7 +129,7 @@ class User extends ActiveRecord implements IdentityInterface
 
         return static::findOne([
             'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
+            'status' => Enum::STATUS_ACTIVE,
         ]);
     }
 
@@ -113,7 +142,7 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByVerificationToken($token) {
         return static::findOne([
             'verification_token' => $token,
-            'status' => self::STATUS_INACTIVE
+            'status' => Enum::STATUS_INACTIVE
         ]);
     }
 

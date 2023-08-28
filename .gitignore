@@ -48,3 +48,5 @@ phpunit.phar
 /backend/web/index.php
 /backend/web/index-test.php
 /backend/web/robots.txt
+common/uploads/company/
+api/runtime/
