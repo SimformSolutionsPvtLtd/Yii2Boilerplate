@@ -67,7 +67,9 @@ class CompanyImages extends \yii\db\ActiveRecord
     {
         if (!empty($this->imageFiles) && $this->validate()) {
             // Delete existing images for the company
-            CompanyImages::deleteAll(['company_id' => $this->company_id]);
+            if (isset($_POST['remove-and-upload-button'])) {
+                CompanyImages::deleteAll(['company_id' => $this->company_id]);
+            }
 
             foreach ($this->imageFiles as $file) {
                 // $fileName = $file->baseName . '_' . time() . '.' . $file->extension;
