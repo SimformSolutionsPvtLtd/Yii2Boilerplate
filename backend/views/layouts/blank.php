@@ -4,7 +4,6 @@
 /** @var string $content */
 
 use backend\assets\AppAsset;
-use common\widgets\Alert;
 use yii\helpers\Html;
 
 AppAsset::register($this);
@@ -24,7 +23,6 @@ AppAsset::register($this);
 
 <main role="main">
     <div class="container">
-        <?= Alert::widget() ?>
         <?= $content ?>
     </div>
 </main>
