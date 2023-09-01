@@ -6,6 +6,7 @@
 
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
+use yii\captcha\Captcha;
 
 $this->title = 'Login';
 ?>
@@ -17,14 +18,21 @@ $this->title = 'Login';
 
         <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 
-            <?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>
+            <?= $form->field($model, 'email')->textInput(['autofocus' => true]); ?>
 
-            <?= $form->field($model, 'password')->passwordInput() ?>
+            <?= $form->field($model, 'password')->passwordInput(); ?>
 
-            <?= $form->field($model, 'rememberMe')->checkbox() ?>
+            <?= $form->field($model, 'captcha')->widget(Captcha::class, [
+                'captchaAction' => 'site/captcha', // The CAPTCHA action route
+                ]) ?>
+
+            <?= $form->field($model, 'rememberMe')->checkbox(); ?>
 
             <div class="form-group">
                 <?= Html::submitButton('Login', ['class' => 'btn btn-primary btn-block', 'name' => 'login-button']) ?>
+            </div>
+            <div class="form-group">
+                <?= Html::a('Forgot Password',['/site/forgot'],['class' => ['btn btn-link login text-decoration-none']]); ?>
             </div>
 
         <?php ActiveForm::end(); ?>

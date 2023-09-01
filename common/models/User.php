@@ -35,6 +35,7 @@ class User extends ActiveRecord implements IdentityInterface
         self::STATUS_DELETED => "Deleted"
     ];
 
+    public $confirm_password, $new_password;
 
     /**
      * {@inheritdoc}
@@ -69,6 +70,8 @@ class User extends ActiveRecord implements IdentityInterface
             [['password_reset_token'], 'unique'],
             ['status', 'default', 'value' => Enum::STATUS_INACTIVE],
             ['status', 'in', 'range' => [Enum::STATUS_ACTIVE, Enum::STATUS_INACTIVE, Enum::STATUS_DELETED]],
+            [['confirm_password', 'new_password'], 'safe'],
+            ['confirm_password', 'validatePasswordConfirmation'],
         ];
     }
 
@@ -78,7 +81,9 @@ class User extends ActiveRecord implements IdentityInterface
             'id' => 'Id',
             'username' => 'User name',
             'auth_key' => 'Auth Key',
-            'password_hash' => 'Password Hash',
+            'password_hash' => 'Password',
+            'new_password' => 'New Password',
+            'confirm_password' => 'Confirm Password',
             'password_reset_token' => 'Password Reset Token',
             'email' => 'Email',
             'status' => 'Status',
@@ -238,5 +243,15 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    /**
+     * Validate Password with comfirm password
+     */
+    public function validatePasswordConfirmation($attribute)
+    {
+        if ($this->new_password !== $this->confirm_password) {
+            $this->addError($attribute, 'Password confirmation does not match.');
+        }
     }
 }
