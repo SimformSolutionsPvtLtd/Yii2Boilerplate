@@ -4,7 +4,6 @@ namespace common\models;
 
 use Yii;
 use yii\base\Model;
-use yii\captcha\CaptchaValidator;
 
 /**
  * Login form
@@ -14,7 +13,6 @@ class LoginForm extends Model
     public $email;
     public $password;
     public $rememberMe = true;
-    public $captcha;
 
     private $_user;
 
@@ -30,8 +28,7 @@ class LoginForm extends Model
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
-            ['password', 'validatePassword'],           
-            ['captcha', CaptchaValidator::class, 'captchaAction' => 'site/captcha'],
+            ['password', 'validatePassword'],
         ];
     }
 
