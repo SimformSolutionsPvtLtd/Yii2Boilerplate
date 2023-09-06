@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'created_at',
                 'value' => function($model) {
-                    return date("Y-m-d h:i A", $model->created_at);
+                    return ($model->created_at) ? date("Y-m-d h:i A", strtotime($model->created_at)) : "-";
                 }
             ],
             [
