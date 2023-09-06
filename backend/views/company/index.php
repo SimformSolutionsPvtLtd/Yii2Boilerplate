@@ -18,10 +18,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Create Company', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::button('Export', ['class' => 'btn btn-info export']); ?>
     </p>
 
+    <?php $sortValue = $dataProvider->getSort()->getAttributeOrders(); ?>
+
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -58,3 +60,36 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end(); ?>
 
 </div>
+<?php
+$exportUrl =  Yii::$app->urlManager->createUrl(['company/export']);
+// Yii::$app->request->get()
+$this->registerJs(<<<JS
+
+    $(document).on('click', '.export', function() {
+        // Get the query string from the URL
+        var queryString = window.location.search;
+
+        // Remove the "?" at the beginning
+        queryString = queryString.substring(1);
+
+        $.ajax({
+            url: '$exportUrl',
+            type: 'GET',
+            data: queryString,
+            xhrFields: {
+                responseType: 'blob' // Set the response type to 'blob'
+            },
+            success: function(data) {
+                var a = document.createElement('a');
+                var url = window.URL.createObjectURL(data);
+                a.href = url;
+                a.download = 'ExcelReport.xlsx'; // Specify the file name here
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+        });
+    });
+JS
+);
+?>
