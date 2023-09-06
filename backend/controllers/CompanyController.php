@@ -5,6 +5,8 @@ namespace backend\controllers;
 use backend\models\Company;
 use backend\models\CompanyImages;
 use backend\models\CompanySearch;
+use common\services\ExportService;
+use Exception;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -191,6 +193,43 @@ class CompanyController extends Controller
         }
 
         return $this->redirect(['view', 'id' => $companyId]);
+    }
+
+    /**
+     * Exports Company data.
+     * @return \yii\web\Response
+     * @throws Exception if anything went wrong
+     */
+    public function actionExport()
+    {
+        try {
+            $companies = new CompanySearch();
+            $exportData = $companies->search($this->request->queryParams)->getModels();
+
+            // Convert the array of models into an array
+            $exportData = array_map(function($model) {
+                return $model->attributes;
+            }, $exportData);
+
+            // $exportData = $companies->getAll();
+            $exportColumns = !empty($exportData) ? array_keys($exportData[0]) : [];
+
+            $labels = $companies->attributeLabels();
+            
+            $titles = [];
+            foreach ($exportColumns as $attribute) {
+                $titles[] = array_key_exists($attribute, $labels) ? $labels[$attribute] : $attribute;
+            }
+
+            ExportService::exportExcel("Company", $titles, $exportData);
+        } catch (Exception $e) {
+            // Handle the exception
+            echo $e->getMessage();
+            echo $e->getTraceAsString();
+            return;
+        }
+
+        // return $this->redirect('index');
     }
 
     /**
